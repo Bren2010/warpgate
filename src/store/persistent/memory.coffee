@@ -2,29 +2,29 @@
 {EventEmitter} = require "events"
 
 exports = module.exports = () ->
-  _self = new EventEmitter()
-  _data = {}
+  self = new EventEmitter()
+  data = {}
 
-  _.bindAll _.extend _self,
+  _.bindAll _.extend self,
     get: (key, next) ->
-      if not _data[key]?
+      if not data[key]?
         next "undefined key", false
       else
-        _self.emit "get:#{key}"
-        _self.emit "get", key
-        next false, _data[key]
+        self.emit "get:#{key}"
+        self.emit "get", key
+        next false, data[key]
 
     set: (key, data, next) ->
-      _data[key] = data
-      _self.emit "set:#{key}", data
-      _self.emit "set", key, data
+      data[key] = data
+      self.emit "set:#{key}", data
+      self.emit "set", key, data
       next false, true
 
     remove: (key, next) ->
-      if not _data[key]?
+      if not data[key]?
         next "undefined key", false
       else
-        delete _data[key]
-        _self.emit "remove:#{key}"
-        _self.emit "remove", key
+        delete data[key]
+        self.emit "remove:#{key}"
+        self.emit "remove", key
         next false, true

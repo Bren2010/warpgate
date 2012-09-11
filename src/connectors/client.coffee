@@ -3,7 +3,7 @@
 upnode         = require "upnode"
 hashring       = require "hashring"
 
-_getRouter = (upstream, next) ->
+getRouter = (upstream, next) ->
   ring  = new hashring(upstream);
   nodes = _.reduce(upstream, (memo, pair) ->
     [host, port] = pair.split ":"
@@ -21,30 +21,30 @@ _getRouter = (upstream, next) ->
     , {})
 
 exports = module.exports = (upstream, next) ->
-  _self   = new EventEmitter();
-  _queue  = {}
+  self   = new EventEmitter();
+  queue  = {}
 
-  _fetchIsQueued = (key) -> _queue[key]? and _queue[key].length
+  fetchIsQueued = (key) -> queue[key]? and queue[key].length
 
-  _queueCallback = (key, next) ->
-    if _queue[key]?
-      _queue[key].push next
+  queueCallback = (key, next) ->
+    if queue[key]?
+      queue[key].push next
     else
-      _queue[key] = [next]
+      queue[key] = [next]
 
-  _createQueueRunner = (key) -> (error, data) ->
-    _self.emit "got", key, data
-    _self.emit "got:#{key}", data
-    if _queue[key]?
-      queue = _queue[key]
-      delete _queue[key]
+  createQueueRunner = (key) -> (error, data) ->
+    self.emit "got", key, data
+    self.emit "got:#{key}", data
+    if queue[key]?
+      queue = queue[key]
+      delete queue[key]
       next error, data for next in queue
 
-  _getRouter upstream, (router) -> next false,
-    _.bindAll _.extend _self,
+  getRouter upstream, (router) -> next false,
+    _.bindAll _.extend self,
       get: (key, next) ->
-        if not _fetchIsQueued key then router.get key, _createQueueRunner key
-        _queueCallback key, next
+        if not fetchIsQueued key then router.get key, createQueueRunner key
+        queueCallback key, next
 
       set: (key, data, next) ->
         router.set key, data, next
