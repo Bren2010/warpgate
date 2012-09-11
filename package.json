@@ -1,0 +1,10 @@
+{
+  "name": "warpcore",
+  "version": "0.1.0",
+  "description": "A distributed highly available and consistent lock and synchronization service",
+  "author": "Joseph Moniz <joseph.moniz@gmail.com>",
+  "keywords": ["synchronization", "locks", "locking", "distributed", "paxos"],
+  "dependencies": {
+    "dnode": "*"
+  }
+}
