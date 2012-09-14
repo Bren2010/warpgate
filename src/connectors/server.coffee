@@ -12,9 +12,9 @@ exports = module.exports = () ->
     unget:  (key, next)       -> self.emit "unget",  @_id, key, next
     remove: (key, next)       -> self.emit "remove", @_id, key, next
 
-  _server.on "local", (ref) ->
-    ref._id = ++_clientId
+  server.on "local", (ref) ->
+    ref._id = ++clientId
     _.bindAll ref
 
   _.bindAll _.extend self,
-    listen: (port) -> _server.listen port
+    listen: (port) -> server.listen port

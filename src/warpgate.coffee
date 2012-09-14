@@ -34,5 +34,8 @@ exports = module.exports = () ->
       else
         remote.get key, next
 
+    remove: (key, next) ->
+      next()
+
     unref: (key) ->
       "unref locally"
