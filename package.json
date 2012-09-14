@@ -1,9 +1,10 @@
 {
   "name": "warpcore",
   "version": "0.1.0",
-  "description": "A distributed highly available and consistent lock and synchronization service",
+  "description": "A sharded push oriented key value store",
   "author": "Joseph Moniz <joseph.moniz@gmail.com>",
-  "keywords": ["synchronization", "locks", "locking", "distributed", "paxos"],
+  "keywords": ["synchronization", "locks", "locking", "distributed"],
+  "main": "./src/warpgate.coffee",
   "dependencies": {
     "dnode": "*"
   }
