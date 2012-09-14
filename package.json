@@ -6,6 +6,8 @@
   "keywords": ["synchronization", "locks", "locking", "distributed"],
   "main": "./src/warpgate.coffee",
   "dependencies": {
-    "dnode": "*"
+    "dnode":         "1.0.x",
+    "upnode":        "0.4.x",
+    "UnderscoreKit": "0.1.x"
   }
 }
