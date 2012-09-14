@@ -1,5 +1,7 @@
-Warpgate
+Warpgate 
 ========
+[![Build Status](https://secure.travis-ci.org/JosephMoniz/warpgate.png)](http://travis-ci.org/JosephMoniz/warpgate)
+
 Warpgate is an experimental push oriented key value store. Instead of focusing 
 on making warpgate as fast as possible it's key design goal is to make it needed
 as little as possible.
