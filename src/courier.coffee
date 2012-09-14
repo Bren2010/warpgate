@@ -10,7 +10,7 @@ exports = module.exports = () ->
       subscribers[key][id] = next
       _.size subscribers[key]
     unget: (id, key) ->
-      if subscribers[key][id]?
+      if subscribers[key]?[id]?
         delete subscribers[key][id]
         if _.size(subscribers[key]) is 0
           delete subscribers[key]

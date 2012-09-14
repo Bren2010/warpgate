@@ -5,11 +5,18 @@
   "author": "Joseph Moniz <joseph.moniz@gmail.com>",
   "keywords": ["synchronization", "locks", "locking", "distributed"],
   "main": "./src/warpgate.coffee",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
   "dependencies": {
     "dnode":         "1.0.x",
     "upnode":        "0.4.x",
     "UnderscoreKit": "0.1.x",
     "hashring":      "0.0.x",
     "async":         "0.1.x"
+  },
+  "devDependencies": {
+    "coffee-script": "1.3.x",
+    "mocha":         "1.4.x"
   }
 }
