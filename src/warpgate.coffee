@@ -12,10 +12,10 @@ exports = module.exports = () ->
   container.on "change", (key, data) ->
     console.log "Changed: #{key} => #{data}"
 
-  _.bindAll _.extend _self,
+  _.bindAll _.extend self,
     connect: (upstream, next) ->
-      connector upstream, _.pass((remote) ->
-        remote = remote
+      connector upstream, _.pass((_remote) ->
+        remote = _remote
         remote.on "got", (key, data) ->
           container.set key, data
         next false, true
@@ -28,8 +28,8 @@ exports = module.exports = () ->
       remote.set key, data, next
 
     get: (key, next) ->
-      if _container.has key
-        [error, node] = _container.get key
+      if container.has key
+        [error, node] = container.get key
         next error, node
       else
         remote.get key, next

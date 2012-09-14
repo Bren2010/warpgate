@@ -1,7 +1,6 @@
 async          = require "async"
 {EventEmitter} = require "events"
 {_}            = require "UnderscoreKit"
-ben            = require "ben"
 
 load     = require "load"
 warpgate = load "warpgate"
@@ -9,10 +8,10 @@ warpgate = load "warpgate"
 errorHandler = (error) -> console.log error
 
 upstream = [
-  "0.0.0.0:2200"
-  "0.0.0.0:2201"
-  "0.0.0.0:2202"
-  "0.0.0.0:2203"
+  "0.0.0.0:2100"
+  "0.0.0.0:2101"
+  "0.0.0.0:2102"
+  "0.0.0.0:2103"
 ]
 
 itterations = 0

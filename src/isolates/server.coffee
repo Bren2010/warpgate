@@ -26,7 +26,6 @@ else
   server.on "set"   , (id, key, data, next) ->
     container.set key, data, next
   server.on "get"   , (id, key, next) ->
-    console.log "in connector get"
     container.get key, next
     courier.get id, key, next
   server.on "unget" , (id, key, next) ->

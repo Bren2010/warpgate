@@ -14,10 +14,10 @@ exports = module.exports = () ->
         self.emit "get", key
         next false, data[key]
 
-    set: (key, data, next) ->
-      data[key] = data
-      self.emit "set:#{key}", data
-      self.emit "set", key, data
+    set: (key, value, next) ->
+      data[key] = value
+      self.emit "set:#{key}", value
+      self.emit "set", key, value
       next false, true
 
     remove: (key, next) ->

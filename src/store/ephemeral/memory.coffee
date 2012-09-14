@@ -21,11 +21,13 @@ exports = module.exports = () ->
   _.bindAll _.extend self,
     has: hasLocalRef
     get: (key) ->
+      self.emit "get", key
       if hasLocalRef key
         [false, reuseExistingRef key]
       else
         ["Attempting to get a node we don't have locally", false]
     set: (key, data) ->
+      self.emit "set", key, data
       if hasUsedRef key
         refs.used[key] = data
       else
