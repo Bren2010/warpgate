@@ -3,7 +3,7 @@ hashring = require "hashring"
 
 module.exports = (streams) ->
   ring = new hashring _.keys streams
-  _.bindAll _.extend
+  _.bindAll _.extend ring,
     route: (method, key, args...) ->
       streams[ring.getNode(key)] (remote) ->
         remote[method].apply this, [key].concat(args)
