@@ -8,7 +8,7 @@ as little as possible.
 
 Most modern mainstream databases, SQL or NoSQL, tend to follow a pull based
 model, this means client services ask the database for answers reactively as
-they need them. Warpcore offsets the ammount of times you have to reach out
+they need them. Warpgate offsets the ammount of times you have to reach out
 to the database by instead of letting client services ask for the data they
 want, client services tell warpgate what data they're interested in. Once a
 client service registers an interest in a data point, warpgate will push
