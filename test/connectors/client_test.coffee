@@ -23,8 +23,9 @@ getStreamMap = () -> _.reduce(fakeUpstream, (memo, target) ->
   inverted = invert()
   server   = upnode fakeHandlers
   writer = inverted.other.write
-  inverted.other.write = (args...) -> setTimeout () =>
-    writer.apply this, args, 1
+  inverted.other.write = (args...) -> setTimeout(() =>
+    writer.apply this, args
+  , 1)
   server.pipe(inverted).pipe(server)
   memo[target] = upnode.connect { createStream: () -> inverted.other }
   memo
