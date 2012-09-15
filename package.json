@@ -1,12 +1,12 @@
 {
-  "name": "warpcore",
+  "name": "warpgate",
   "version": "0.1.0",
   "description": "A sharded push oriented key value store",
   "author": "Joseph Moniz <joseph.moniz@gmail.com>",
   "keywords": ["synchronization", "locks", "locking", "distributed"],
   "main": "./src/warpgate.coffee",
   "scripts": {
-    "test": "./node_modules/.bin/mocha"
+    "test": "./node_modules/.bin/mocha --recursive"
   },
   "dependencies": {
     "dnode":         "1.0.x",
