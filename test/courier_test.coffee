@@ -5,8 +5,7 @@ load        = require "load"
 courier_gen = load "courier"
 
 describe "courier", () ->
-  beforeEach () ->
-    @courier = courier_gen()
+  beforeEach () -> @courier = courier_gen()
   describe ".get", () ->
     it "should add a subscriber for id '1' on key 'a'", () ->
       assert.equal 1, @courier.get 1, "a", _.identity
