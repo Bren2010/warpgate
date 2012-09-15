@@ -22,9 +22,9 @@ exports = module.exports = (upstream, next) ->
     self.emit "got", key, data
     self.emit "got:#{key}", data
     if queue[key]?
-      queue = queue[key]
+      callbacks = queue[key]
       delete queue[key]
-      next error, data for next in queue
+      next error, data for next in callbacks
 
   router = router_gen upstream
   _.bindAll _.extend self,
