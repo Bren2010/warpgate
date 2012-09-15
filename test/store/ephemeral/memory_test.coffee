@@ -30,7 +30,7 @@ describe "store/ephemeral/memory", () ->
       [error, value] = @container.get "a"
       assert.equal "v", value
 
-    it "should set the correct value for a previously set key"
+    it "should set the correct value for a previously set key", () ->
       @container.set "a", "a"
       @container.set "a", "b"
       [error, value] = @container.get "a"
@@ -38,19 +38,21 @@ describe "store/ephemeral/memory", () ->
 
   describe "unref", () ->
     it "should return an error case when unreferencing an invalid key", () ->
-      [error, value] = @container.get "a"
+      [error, value] = @container.unref "a"
       assert.equal true, !!error
 
     it "should return value false when unreferencing an invalid key", () ->
-      [error, value] = @container.get "a"
+      [error, value] = @container.unref "a"
       assert.equal false, value
 
     it "shouldn't return an error case when unreferencing a valid key", () ->
       @container.set "a", "v"
-      [error, value] = @container.get "a"
+      @container.get "a"
+      [error, value] = @container.unref "a"
       assert.equal false, error
 
     it "should return value true when unreferencing a valid key", () ->
       @container.set "a", "v"
-      [error, value] = @container.get "a"
+      @container.get "a"
+      [error, value] = @container.unref "a"
       assert.equal true, value
