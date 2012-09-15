@@ -1,5 +1,6 @@
 {_}            = require "UnderscoreKit"
 {EventEmitter} = require "events"
+upnode         = require "upnode"
 
 load      = require "load"
 ephemeral = load "store/ephemeral/memory"
@@ -13,19 +14,17 @@ exports = module.exports = () ->
     console.log "Changed: #{key} => #{data}"
 
   _.bindAll _.extend self,
-    connect: (upstream, next) ->
-      connector upstream, _.pass((_remote) ->
-        remote = _remote
-        remote.on "got", (key, data) ->
-          container.set key, data
-        next false, true
-      , next)
+    connect: (upstream) ->
+      remote = connector _.reduce(upstream, (memo, target) ->
+        [host, port] = target.split ":"
+        memo[target] = upnode.connect port, host
+        memo
+      , {})
+      remote.on "got", (key, data) -> container.set key, data
 
-    create: (key, data, next) ->
-      remote.create key, data, next
+    create: (key, data, next) -> remote.create key, data, next
 
-    set: (key, data, next) ->
-      remote.set key, data, next
+    set: (key, data, next) -> remote.set key, data, next
 
     get: (key, next) ->
       if container.has key
@@ -34,8 +33,6 @@ exports = module.exports = () ->
       else
         remote.get key, next
 
-    remove: (key, next) ->
-      next()
+    remove: (key, next) -> next()
 
-    unref: (key) ->
-      "unref locally"
+    unref: (key) -> "unref locally"

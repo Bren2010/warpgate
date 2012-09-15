@@ -16,13 +16,12 @@ upstream = [
 
 itterations = 0
 
-_client = warpgate()
-_client.connect upstream, _.pass(() ->
-  console.log "client ready"
-  tick = () ->
-    setTimeout(() ->
-      _client.set "users:lohkey", version: ++itterations, () ->
-        tick()
-    , 300)
-  tick()
-, errorHandler)
+client = warpgate()
+client.connect upstream
+console.log "client ready"
+tick = () ->
+  setTimeout(() ->
+    client.set "users:lohkey", version: ++itterations, () ->
+      tick()
+  , 300)
+tick()
