@@ -8,7 +8,7 @@ as little as possible.
 
 Most modern mainstream databases, SQL or NoSQL, tend to follow a pull based
 model, this means client services ask the database for answers reactively as
-they need them. Warpcore offsets the ammount of times you have to reach out
+they need them. Warpgate offsets the ammount of times you have to reach out
 to the database by instead of letting client services ask for the data they
 want, client services tell warpgate what data they're interested in. Once a
 client service registers an interest in a data point, warpgate will push
@@ -18,6 +18,23 @@ It's common knowledge in database performance optimization that the fastest
 query is the one that you never have to make. So instead of optimizing for
 max requests per second, Warpgate optimizes for how little requests per second
 it needs to answer.
+
+Standard Topology
+=================
+The standard warpgate topology is a fairly typical client, cache tier (dealers)
+and sharded data store configuration.
+
+![Topology Diagram](http://i.imgur.com/ZM34Y.jpg)
+
+What makes the warpgate topology different then most is the cache tier transparently
+performs caching and push based distribution while proxying the minimal amount of
+requests to the correct persistent data store servers. Likewise, dealers appear as
+standard clients to persistent data store servers and transparently forward all data
+updates to all subscribed client services. This means you no longer have to write
+custom caching models and cache invalidation logic, warpgate dealers do all of this 
+for you transparently. The client service simply tells the warpgate API what data
+it is interested in and the correct warpgate dealer will keep the client service up
+to date while the correct persistent data store server will keep the dealer up to date.
 
 Component Analysis
 ==================
