@@ -18,3 +18,4 @@ exports = module.exports = () ->
 
   _.bindAll _.extend self,
     listen: (port) -> server.listen port
+    getStream:  () -> server
