@@ -2,9 +2,8 @@
 {EventEmitter} = require "events"
 
 exports = module.exports = () ->
-  self = new EventEmitter()
   subscribers = {}
-  _.bindAll _.extend self,
+  _.bindAll _.extend new EventEmitter(),
     get: (id, key, next) ->
       if not subscribers[key]? then subscribers[key] = {}
       subscribers[key][id] = next
@@ -14,7 +13,7 @@ exports = module.exports = () ->
         delete subscribers[key][id]
         if _.size(subscribers[key]) is 0
           delete subscribers[key]
-          self.emit "unused", key
+          @emit "unused", key
         true
       else
         false

@@ -7,13 +7,12 @@ ephemeral = load "store/ephemeral/memory"
 connector = load "connectors/client"
 
 exports = module.exports = () ->
-  self      = new EventEmitter()
   remote    = null
   container = ephemeral()
   container.on "change", (key, data) ->
     console.log "Changed: #{key} => #{data}"
 
-  _.bindAll _.extend self,
+  _.bindAll _.extend new EventEmitter(),
     connect: (upstream) ->
       remote = connector _.reduce(upstream, (memo, target) ->
         [host, port] = target.split ":"
