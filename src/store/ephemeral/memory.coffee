@@ -2,11 +2,10 @@
 {EventEmitter} = require "events"
 
 class StoreEphemeralMemory extends EventEmitter
-  refs:
-    used:   {}
-    unused: {}
-
   constructor: () ->
+    @refs =
+      used:   {}
+      unused: {}
     _.bindAll this
 
   has:       (key) -> @hasUsed(key) or @hasUnused(key)

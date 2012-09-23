@@ -2,9 +2,8 @@
 {EventEmitter} = require "events"
 
 class Courier extends EventEmitter
-  subscribers: {}
-
   constructor: () ->
+    @subscribers = {}
     _.bindAll this
 
   get: (id, key, next) ->
