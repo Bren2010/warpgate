@@ -17,10 +17,11 @@ itterations = 10000
 client = new Warpgate()
 client.connect upstream
 console.log "client ready"
-tick = () ->
-  setTimeout(() ->
-    client.get "users:lohkey", (error, data) ->
-      console.log data
-      tick()
-  , 500)
-tick()
+client.get "users:lohkey", (error, item) ->
+  console.log "in callback"
+  console.log item.get()
+  console.log "trying again"
+  client.get "users:lohkey", (error, item) ->
+    console.log item.get()
+    console.log "got response"
+  #item.on "change", () -> console.log item.get()

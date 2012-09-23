@@ -5,16 +5,17 @@ upnode         = require "upnode"
 load      = require "load"
 Ephemeral = load "store/ephemeral/memory"
 Connector = load "connectors/client"
+Item      = load "item"
 
 class Warpgate extends EventEmitter
   remote:    null
   container: null
 
   constructor: () ->
-    @container = new Ephemeral()
-    @container.on "change", (key, data) ->
-      console.log "Changed: #{key} => #{data}"
     _.bindAll this
+    @container = new Ephemeral()
+    @container.on "set", (key, data) ->
+      console.log "Set: #{key} => #{JSON.stringify(data)}"
 
   connect: _.once (upstream) ->
     @remote = new Connector _.reduce(upstream, (memo, target) ->
@@ -22,14 +23,20 @@ class Warpgate extends EventEmitter
       memo[target] = upnode.connect port, host
       memo
     , {})
-    @remote.on "got", (key, data) => @container.set key, data
+    @remote.on "got", (key, data) =>
+      @emit "got", key, data
+      @emit "got:#{key}", data
+      @container.set key, data
 
   get: (key, next) ->
     if @container.has key
-      [error, node] = @container.get key
-      next error, node
+      [error, value] = @container.get key
+      next error, new Item(this, key, value)
     else
-      @remote.get key, next
+      @remote.get key, _.pass((value) =>
+        item = new Item(this, key, value)
+        next false, item
+      , next)
 
   set: (key, value, next) -> @remote.set key, value, next
 
