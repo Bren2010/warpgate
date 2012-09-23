@@ -1,11 +1,11 @@
 assert = require "assert"
 {_}    = require "UnderscoreKit"
 
-load        = require "load"
-courier_gen = load "courier"
+load    = require "load"
+Courier = load "courier"
 
 describe "courier", () ->
-  beforeEach () -> @courier = courier_gen()
+  beforeEach () -> @courier = new Courier()
   describe ".get", () ->
     it "should add a subscriber for id '1' on key 'a'", () ->
       assert.equal 1, @courier.get 1, "a", _.identity
@@ -15,8 +15,8 @@ describe "courier", () ->
       assert.equal 1, @courier.get 1, "a", _.identity
 
     it "should add a subscriber for id '2' on key 'a'", () ->
-      @courier.get 1, "a", _.identity
-      assert.equal 2, @courier.get 2, "a", _.identity
+      @courier.get 2, "a", _.identity
+      assert.equal 1, @courier.get 2, "a", _.identity
 
     it "should not add another subscriber for id '2' on key 'a'", () ->
       @courier.get 2, "a", _.identity

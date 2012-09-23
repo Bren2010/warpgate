@@ -4,7 +4,7 @@ invert = require "invert-stream"
 {_}    = require "UnderscoreKit"
 
 load      = require "load"
-connector = load "connectors/client"
+Connector = load "connectors/client"
 
 fakeUpstream = [
   "0.0.0.0:2200"
@@ -33,7 +33,7 @@ getStreamMap = () -> _.reduce(fakeUpstream, (memo, target) ->
 
 describe "connectors/client", () ->
   beforeEach () ->
-    @client = connector getStreamMap()
+    @client = new Connector getStreamMap()
   describe ".get", () ->
     it "should route the request upstream and receive a response", (next) ->
       @client.get "k", next

@@ -4,11 +4,11 @@ upnode = require "upnode"
 {_}    = require "UnderscoreKit"
 
 load      = require "load"
-connector = load "connectors/server"
+Connector = load "connectors/server"
 
 describe "connectors/server", () ->
   beforeEach () ->
-    @server  = connector()
+    @server  = new Connector()
     @down    = @server.getStream()
     @stream  = invert()
     @down.pipe(@stream).pipe(@down)
