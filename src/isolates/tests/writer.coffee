@@ -3,7 +3,7 @@ async          = require "async"
 {_}            = require "UnderscoreKit"
 
 load     = require "load"
-warpgate = load "warpgate"
+Warpgate = load "warpgate"
 
 errorHandler = (error) -> console.log error
 
@@ -16,12 +16,13 @@ upstream = [
 
 itterations = 0
 
-client = warpgate()
+client = new Warpgate()
 client.connect upstream
 console.log "client ready"
 tick = () ->
   setTimeout(() ->
     client.set "users:lohkey", version: ++itterations, () ->
+      console.log "set #{itterations}"
       tick()
   , 300)
 tick()

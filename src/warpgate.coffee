@@ -3,35 +3,38 @@
 upnode         = require "upnode"
 
 load      = require "load"
-ephemeral = load "store/ephemeral/memory"
-connector = load "connectors/client"
+Ephemeral = load "store/ephemeral/memory"
+Connector = load "connectors/client"
 
-exports = module.exports = () ->
-  remote    = null
-  container = ephemeral()
-  container.on "change", (key, data) ->
-    console.log "Changed: #{key} => #{data}"
+class Warpgate extends EventEmitter
+  remote:    null
+  container: null
 
-  _.bindAll _.extend new EventEmitter(),
-    connect: (upstream) ->
-      remote = connector _.reduce(upstream, (memo, target) ->
-        [host, port] = target.split ":"
-        memo[target] = upnode.connect port, host
-        memo
-      , {})
-      remote.on "got", (key, data) -> container.set key, data
+  constructor: () ->
+    @container = new Ephemeral()
+    @container.on "change", (key, data) ->
+      console.log "Changed: #{key} => #{data}"
+    _.bindAll this
 
-    create: (key, data, next) -> remote.create key, data, next
+  connect: _.once (upstream) ->
+    @remote = new Connector _.reduce(upstream, (memo, target) ->
+      [host, port] = target.split ":"
+      memo[target] = upnode.connect port, host
+      memo
+    , {})
+    @remote.on "got", (key, data) => @container.set key, data
 
-    set: (key, data, next) -> remote.set key, data, next
+  get: (key, next) ->
+    if @container.has key
+      [error, node] = @container.get key
+      next error, node
+    else
+      @remote.get key, next
 
-    get: (key, next) ->
-      if container.has key
-        [error, node] = container.get key
-        next error, node
-      else
-        remote.get key, next
+  set: (key, value, next) -> @remote.set key, value, next
 
-    remove: (key, next) -> next()
+  remove: (key, next) -> next()
 
-    unref: (key) -> "unref locally"
+  unref: (key) -> "unref locally"
+
+module.exports = Warpgate

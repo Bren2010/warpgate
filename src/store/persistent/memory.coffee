@@ -1,30 +1,33 @@
 {_}            = require "UnderscoreKit"
 {EventEmitter} = require "events"
 
-exports = module.exports = () ->
-  self = new EventEmitter()
-  data = {}
+class StorePersistentMemory extends EventEmitter
+  data: {}
 
-  _.bindAll _.extend self,
-    get: (key, next) ->
-      if not data[key]?
-        next "undefined key", false
-      else
-        self.emit "get:#{key}"
-        self.emit "get", key
-        next false, data[key]
+  constructor: () ->
+    _.bindAll this
 
-    set: (key, value, next) ->
-      data[key] = value
-      self.emit "set:#{key}", value
-      self.emit "set", key, value
+  get: (key, next) ->
+    if not @data[key]?
+      next "undefined key", false
+    else
+      @emit "get:#{key}"
+      @emit "get", key
+      next false, @data[key]
+
+  set: (key, value, next) ->
+    @data[key] = value
+    @emit "set:#{key}", value
+    @emit "set", key, value
+    next false, true
+
+  remove: (key, next) ->
+    if not @data[key]?
+      next "undefined key", false
+    else
+      delete @data[key]
+      @emit "remove:#{key}"
+      @emit "remove", key
       next false, true
 
-    remove: (key, next) ->
-      if not data[key]?
-        next "undefined key", false
-      else
-        delete data[key]
-        self.emit "remove:#{key}"
-        self.emit "remove", key
-        next false, true
+module.exports = StorePersistentMemory

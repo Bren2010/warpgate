@@ -1,19 +1,19 @@
 cluster = require "cluster"
 os      = require "os"
 
-load              = require "load"
-persistent        = load "store/persistent/memory"
-connector         = load "connectors/server"
-courier_generator = load "courier"
+load       = require "load"
+Persistent = load "store/persistent/memory"
+Connector  = load "connectors/server"
+Courier    = load "courier"
 
 workerCount = os.cpus().length
-courier     = courier_generator()
+courier     = new Courier()
 basePort    = 2200
 
 if cluster.isMaster
   cluster.fork id: id for id in [0...workerCount]
 else
-  container = persistent()
+  container = new Persistent()
   container.on "get", (key) ->
     console.log "Get #{key}"
   container.on "set", (key, data) ->
@@ -22,7 +22,7 @@ else
   container.on "remove", (key) ->
     console.log "Removed #{key}"
 
-  server = connector()
+  server = new Connector()
   server.on "set"   , (id, key, data, next) ->
     container.set key, data, next
   server.on "get"   , (id, key, next) ->

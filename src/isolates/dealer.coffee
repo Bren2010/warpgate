@@ -4,10 +4,10 @@ upnode  = require "upnode"
 {_}     = require "UnderscoreKit"
 
 load          = require "load"
-ephemeral     = load "store/ephemeral/memory"
-upConnector   = load "connectors/client"
-downConnector = load "connectors/server"
-courier_gen   = load "courier"
+Ephemeral     = load "store/ephemeral/memory"
+UpConnector   = load "connectors/client"
+DownConnector = load "connectors/server"
+Courier       = load "courier"
 
 # TODO: this will be commandline or config derived
 tmpUpstream = [
@@ -27,10 +27,10 @@ errorHandler = (error) ->
 if cluster.isMaster
   cluster.fork id: id for id in [0...workerCount]
 else
-  courier   = courier_gen()
-  container = ephemeral()
-  server    = downConnector()
-  client    = upConnector _.reduce(tmpUpstream, (memo, target) ->
+  courier   = new Courier()
+  container = new Ephemeral()
+  server    = new DownConnector()
+  client    = new UpConnector _.reduce(tmpUpstream, (memo, target) ->
     [host, port] = target.split ":"
     memo[target] = upnode.connect port, host
     memo

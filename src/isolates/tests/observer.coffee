@@ -3,7 +3,7 @@ async          = require "async"
 {_}            = require "UnderscoreKit"
 
 load     = require "load"
-warpgate = load "warpgate"
+Warpgate = load "warpgate"
 
 upstream = [
   "0.0.0.0:2100"
@@ -14,7 +14,7 @@ upstream = [
 
 itterations = 10000
 
-client = warpgate()
+client = new Warpgate()
 client.connect upstream
 console.log "client ready"
 tick = () ->

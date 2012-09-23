@@ -1,13 +1,13 @@
 {EventEmitter} = require "events"
 {_}            = require "UnderscoreKit"
+async          = require "async"
 upnode         = require "upnode"
 hashring       = require "hashring"
 
 load   = require "load"
-router_gen = load "router"
+Router = load "router"
 
-exports = module.exports = (upstream, next) ->
-  self   = new EventEmitter();
+Queue = (self, router) ->
   queue  = {}
 
   fetchIsQueued = (key) -> queue[key]? and queue[key].length
@@ -26,16 +26,30 @@ exports = module.exports = (upstream, next) ->
       delete queue[key]
       next error, data for next in callbacks
 
-  router = router_gen upstream
-  _.bindAll _.extend self,
-    get: (key, next) ->
-      if not fetchIsQueued key
-        router.route "get", key, createQueueRunner key
-      queueCallback key, next
+  (key, next) ->
+    if not fetchIsQueued key
+      router.route "get", key, createQueueRunner key
+    queueCallback key, next
 
-    set: (key, data, next) ->
-      router.route "set", key, data, next
+class ConnectorClient extends EventEmitter
+  router: null
+  queue:  {}
 
-    unget: (key, next) -> router.route "unget", key, next
+  constructor: (upstream) ->
+    @router = new Router upstream
+    @queue  = Queue this, @router
+    _.bindAll this
 
-    remove: (key, next) -> router.route "remove", key, next
+  get: (key, next) ->
+    @queue key, next
+
+  set: (key, value, next) ->
+    @router.route "set", key, value, next
+
+  unget: (key, next) ->
+    @router.route "unget", key, next
+
+  remove: (key, next) ->
+    @router.route "remove", key, next
+
+module.exports = ConnectorClient

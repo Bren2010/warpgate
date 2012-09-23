@@ -1,41 +1,41 @@
 {_}            = require "UnderscoreKit"
 {EventEmitter} = require "events"
 
-exports = module.exports = () ->
-  self = new EventEmitter()
+class StoreEphemeralMemory extends EventEmitter
+  refs:
+    used:   {}
+    unused: {}
 
-  refs =
-    used:     {}
-    unused:   {}
+  constructor: () ->
+    _.bindAll this
 
-  hasLocalRef  = (key) -> hasUsedRef(key) or hasUnusedRef(key)
-  hasUsedRef   = (key) -> refs.used[key]?
-  hasUnusedRef = (key) -> refs.unused[key]?
+  has:       (key) -> @hasUsed(key) or @hasUnused(key)
+  hasUsed:   (key) -> @refs.used[key]?
+  hasUnused: (key) -> @refs.unused[key]?
 
-  reuseExistingRef = (key) ->
-    if hasUnusedRef key
-      refs.used[key] = refs.unused[key]
-      delete refs.unused[key]
-    refs.used[key]
+  get: (key) ->
+    @emit "get", key
+    if @has key
+      if @hasUnused key
+        @refs.used[key] = @refs.unused[key]
+        delete @refs.unused[key]
+      [false, @refs.used[key]]
+    else
+      ["Attempting to get a node we don't have locally", false]
 
-  _.bindAll _.extend self,
-    has: hasLocalRef
-    get: (key) ->
-      self.emit "get", key
-      if hasLocalRef key
-        [false, reuseExistingRef key]
-      else
-        ["Attempting to get a node we don't have locally", false]
-    set: (key, data) ->
-      self.emit "set", key, data
-      if hasUsedRef key
-        refs.used[key] = data
-      else
-        refs.unused[key] = data
-    unref: (key) ->
-      if not hasUsedRef key
-        ["Attempting to unref an unused key", false]
-      else
-        refs.unused[key] = refs.used[key]
-        delete refs.used[key]
-        [false, true]
+  set: (key, value) ->
+    @emit "set", key, value
+    if @hasUsed key
+      @refs.used[key] = value
+    else
+      @refs.unused[key] = value
+
+  unref: (key) ->
+    if not @hasUsed key
+      false
+    else
+      @refs.unused[key] = @refs.used[key]
+      delete @refs.used[key]
+      true
+
+module.exports = StoreEphemeralMemory
