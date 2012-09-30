@@ -2,7 +2,7 @@ cluster = require "cluster"
 os      = require "os"
 
 load       = require "load"
-Persistent = load "store/persistent/memory"
+Persistent = load "store/persistent/leveldb"
 Connector  = load "connectors/server"
 Courier    = load "courier"
 
