@@ -13,7 +13,8 @@ basePort    = 2200
 if cluster.isMaster
   cluster.fork id: id for id in [0...workerCount]
 else
-  container = new Persistent()
+  workerId  = parseInt(process.env.id)
+  container = new Persistent(workerId)
   container.on "get", (key) ->
     console.log "Get #{key}"
   container.on "set", (key, data) ->
@@ -33,6 +34,6 @@ else
   server.on "remove", (id, key, next) ->
     container.remove key, next
 
-  port = basePort + parseInt(process.env.id)
+  port = basePort + workerId
   server.listen port
   console.log "listening on port #{port}"

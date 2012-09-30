@@ -2,9 +2,9 @@
 {EventEmitter} = require "events"
 
 class StorePersistentMemory extends EventEmitter
-  data: {}
-
   constructor: () ->
+    super()
+    @data = {}
     _.bindAll this
 
   get: (key, next) ->
