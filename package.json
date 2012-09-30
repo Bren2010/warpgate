@@ -13,7 +13,8 @@
     "upnode":        "0.4.x",
     "UnderscoreKit": "0.1.x",
     "hashring":      "0.0.x",
-    "async":         "0.1.x"
+    "async":         "0.1.x",
+    "leveldb":       "git://github.com/my8bird/node-leveldb.git"
   },
   "devDependencies": {
     "coffee-script": "1.3.x",
