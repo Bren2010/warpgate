@@ -1,6 +1,6 @@
 {
   "name": "warpgate",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A sharded push oriented key value store",
   "author": "Joseph Moniz <joseph.moniz@gmail.com>",
   "keywords": ["synchronization", "locks", "locking", "distributed"],
